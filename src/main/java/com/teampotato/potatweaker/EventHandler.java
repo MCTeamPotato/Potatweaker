@@ -36,12 +36,12 @@ public class EventHandler {
                 event.setCanceled(true);
             }
         } else {
-            if (replaceChance >= world.getRandom().nextInt(101)) {
+            if (replaceChance > world.getRandom().nextInt(101)) {
                 event.setCanceled(true);
                 summonHelper(Objects.requireNonNull(world.getServer()), event);
             }
         }
-        replaced.addTag("potatweaker.spawned");
+        if(!event.isCanceled()) replaced.addTag("potatweaker.spawned");
     }
 
     private static void summonHelper(MinecraftServer server, EntityJoinWorldEvent event) {
