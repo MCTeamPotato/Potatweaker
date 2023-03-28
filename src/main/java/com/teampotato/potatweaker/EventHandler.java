@@ -19,11 +19,11 @@ public class EventHandler {
         if (world.isClientSide || Config.REPLACED.get().isEmpty()) return;
 
         Entity replaced = event.getEntity();
-        if (replaced.getTags().contains("potatweaker.spawned")) return;
         String name = Objects.requireNonNull(replaced.getType().getRegistryName()).toString();
 
         int index = Config.REPLACED.get().indexOf(name);
         if (index == -1) return;
+        if (replaced.getTags().contains("potatweaker.spawned")) return;
 
         boolean removalMatchesChance = Config.REMOVAL_MATCHES_CHANCE.get().get(index);
         boolean isRemoval = Config.REMOVE.get().get(index);
