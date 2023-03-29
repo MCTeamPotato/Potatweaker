@@ -2,7 +2,6 @@ package com.teampotato.potatweaker;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -38,20 +37,20 @@ public class EventHandler {
         } else {
             if (replaceChance > world.getRandom().nextInt(101)) {
                 event.setCanceled(true);
-                summonHelper(Objects.requireNonNull(world.getServer()), event);
+                summonHelper(Objects.requireNonNull(world.getServer()), index, replaced);
             }
         }
         if(!event.isCanceled()) replaced.addTag("potatweaker.spawned");
     }
 
-    private static void summonHelper(MinecraftServer server, EntityJoinWorldEvent event) {
-        Entity replaced = event.getEntity();
-        String name = Objects.requireNonNull(replaced.getType().getRegistryName()).toString();
-        String replacer = Config.REPLACER.get().get(Config.REPLACED.get().indexOf(name));
-
+    private static void summonHelper(MinecraftServer server, Integer index, Entity replaced) {
         Vector3d pos = replaced.position();
 
-        String cmd = "/execute in " + replaced.level.dimension().location() + " run summon " + replacer + " " + pos.x + " " + pos.y + " " + pos.z;
+        String dim = replaced.level.dimension().location().toString();
+        String replacer = Config.REPLACER.get().get(index);
+        String nbt = Config.NBT.get().get(index);
+
+        String cmd = "/execute in " + dim + " run summon " + replacer + " " + pos.x + " " + pos.y + " " + pos.z + " {" + nbt + "}";
 
         server.getCommands().performCommand(server.createCommandSourceStack().withSuppressedOutput(), cmd);
     }
