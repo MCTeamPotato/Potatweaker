@@ -1,0 +1,12 @@
+modLoader="javafml"
+loaderVersion="[40,)"
+license="LGPL-v2.1"
+
+[[mods]]
+modId="potatweaker"
+version="${file.jarVersion}"
+displayName="Potatweaker"
+authors="TeamPotato"
+description='''
+
+'''
