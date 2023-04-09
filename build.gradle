@@ -1,33 +1,20 @@
-buildscript {
-    repositories {
-        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
-        maven { url = 'https://maven.minecraftforge.net' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-    }
-}
-
 plugins {
     id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '5.1.+'
 }
-apply plugin: 'net.minecraftforge.gradle'
 
-
-version = '1.18.2-1.0.2'
-group = 'com.teampotato.potatweaker'
+version = '1.19-1.0.2'
+group = 'com.teampotato.potatweaker' 
 archivesBaseName = 'potatweaker'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    
-    mappings channel: 'official', version: '1.18.2'
-    
+    mappings channel: 'official', version: '1.19.4'
     runs {
         client {
             workingDirectory project.file('run')
+
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'potatweaker'
@@ -54,9 +41,11 @@ minecraft {
 
         gameTestServer {
             workingDirectory project.file('run')
+
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'potatweaker'
+
             mods {
                 potatweaker {
                     source sourceSets.main
@@ -66,9 +55,12 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
+
             property 'forge.logging.markers', 'REGISTRIES'
+
             property 'forge.logging.console.level', 'debug'
             args '--mod', 'potatweaker', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
             mods {
                 potatweaker {
                     source sourceSets.main
@@ -80,8 +72,9 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.2.1'
+    minecraft 'net.minecraftforge:forge:1.19.4-45.0.42'
 }
 
 jar {
