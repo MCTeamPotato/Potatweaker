@@ -1,9 +1,9 @@
 package com.teampotato.potatweaker;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,7 +16,7 @@ public class EventHandler {
     @SubscribeEvent
     public static void ctrlSpawn(LivingSpawnEvent.CheckSpawn event) {
         Entity replaced = event.getEntity();
-        World world = replaced.level;
+        Level world = replaced.level;
         if (world.isClientSide || Config.REPLACED.get().isEmpty() || replaced.getType().getRegistryName() == null) return;
 
         int index = Config.REPLACED.get().indexOf(replaced.getType().getRegistryName().toString());
@@ -41,7 +41,7 @@ public class EventHandler {
     }
 
     private static void summonHelper(MinecraftServer server, Integer index, Entity replaced) {
-        Vector3d pos = replaced.position();
+        Vec3 pos = replaced.position();
 
         String dim = replaced.level.dimension().location().toString();
         String replacer = Config.REPLACER.get().get(index);

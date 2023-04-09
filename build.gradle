@@ -1,36 +1,36 @@
 buildscript {
     repositories {
+        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
-        jcenter()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-       // classpath group: 'org.spongepowered',  name: 'mixingradle', version: '0.7+'
     }
 }
 
+plugins {
+    id 'maven-publish'
+}
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'maven-publish'
-//apply plugin: 'org.spongepowered.mixin'
 
-version = '1.16.5-' + mod_version
+
+version = '1.18.2-1.0.2'
 group = 'com.teampotato.potatweaker'
 archivesBaseName = 'potatweaker'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
-
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'official', version: '1.16.5'
-    //accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
+    
+    mappings channel: 'official', version: '1.18.2'
+    
     runs {
         client {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'info'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'potatweaker'
 
             mods {
                 potatweaker {
@@ -42,8 +42,21 @@ minecraft {
         server {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'info'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'potatweaker'
 
+            mods {
+                potatweaker {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        gameTestServer {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'potatweaker'
             mods {
                 potatweaker {
                     source sourceSets.main
@@ -54,10 +67,8 @@ minecraft {
         data {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'info'
-
+            property 'forge.logging.console.level', 'debug'
             args '--mod', 'potatweaker', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
             mods {
                 potatweaker {
                     source sourceSets.main
@@ -68,38 +79,23 @@ minecraft {
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
-/*
-mixin {
-    add sourceSets.main, "potatweaker.refmap.json"
-}
-*/
-repositories {
-    maven {
-        url = "https://www.cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
-}
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
-    //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.2.1'
 }
 
 jar {
     manifest {
         attributes([
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"TeamPotato",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")//,
-            //"MixinConfigs": "potatweaker.mixins.json"
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "potatweakersareus",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
 
-jar.finalizedBy('reobfJar') 
+jar.finalizedBy('reobfJar')
 
 publishing {
     publications {
@@ -109,7 +105,11 @@ publishing {
     }
     repositories {
         maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
+            url "file://${project.projectDir}/mcmodsrepo"
         }
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
 }
