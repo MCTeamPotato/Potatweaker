@@ -1,25 +1,27 @@
 package com.teampotato.potatweaker;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.living.MobSpawnEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Objects;
-
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = "potatweaker")
 public class EventHandler {
     @SubscribeEvent
-    public static void ctrlSpawn(MobSpawnEvent.FinalizeSpawn event) {
+    public static void ctrlSpawn(LivingSpawnEvent.CheckSpawn event) {
         Entity replaced = event.getEntity();
         Level world = replaced.level;
         if (world.isClientSide || Config.REPLACED.get().isEmpty()) return;
-        String type = replaced.getType().toString();
+        ResourceLocation type = ForgeRegistries.ENTITY_TYPES.getKey(replaced.getType());
+        if (type == null) return;
 
-        int index = Config.REPLACED.get().indexOf(type.split("\\.")[1] + ":" + type.split("\\.")[2]);
+        int index = Config.REPLACED.get().indexOf(type.toString());
         if (index == -1) return;
 
         boolean removalMatchesChance = Config.REMOVAL_MATCHES_CHANCE.get().get(index);
@@ -28,14 +30,14 @@ public class EventHandler {
 
         if (isRemoval) {
             if (removalMatchesChance) {
-                if (replaceChance > world.getRandom().nextInt(101)) event.setSpawnCancelled(true);
+                if (replaceChance > world.getRandom().nextInt(101)) event.setResult(Event.Result.DENY);
             } else {
-                event.setSpawnCancelled(true);
+                event.setResult(Event.Result.DENY);
             }
         } else {
-            if (replaceChance > world.getRandom().nextInt(101)) {
-                event.setSpawnCancelled(true);
-                summonHelper(Objects.requireNonNull(world.getServer()), index, replaced);
+            if (replaceChance > world.getRandom().nextInt(101) && world.getServer() != null) {
+                event.setResult(Event.Result.DENY);
+                summonHelper(world.getServer(), index, replaced);
             }
         }
     }

@@ -3,14 +3,14 @@ plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
-version = '1.19-1.0.2'
+version = '1.19.2-1.0.2'
 group = 'com.teampotato.potatweaker' 
 archivesBaseName = 'potatweaker'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'official', version: '1.19.4'
+    mappings channel: 'official', version: '1.19.2'
     runs {
         client {
             workingDirectory project.file('run')
@@ -74,7 +74,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.4-45.0.42'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.2.11'
 }
 
 jar {
@@ -82,7 +82,7 @@ jar {
         attributes([
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "potatweakersareus",
+                "Implementation-Vendor"   : "teampotato",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
