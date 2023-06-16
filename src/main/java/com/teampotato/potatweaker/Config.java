@@ -13,13 +13,6 @@ public class Config {
     public static ForgeConfigSpec.ConfigValue<List<? extends Boolean>> REMOVE, REMOVAL_MATCHES_CHANCE;
 
     static {
-        List<? extends String> entityToReplace = Lists.newArrayList();
-        List<? extends String> replacer = Lists.newArrayList();
-        List<? extends String> nbt = Lists.newArrayList();
-        List<? extends Integer> replaceChance = Lists.newArrayList();
-        List<? extends Boolean> replaceToAir = Lists.newArrayList();
-        List<? extends Boolean> chanceReplaceToAir = Lists.newArrayList();
-
         Predicate<Object> stringValidator = a -> a instanceof String;
         Predicate<Object> intValidator = b -> b instanceof Integer;
         Predicate<Object> booleanValidator = c -> c instanceof Boolean;
@@ -28,24 +21,24 @@ public class Config {
         CONFIG_BUILDER.comment("Potatweaker").push("General");
         REPLACED = CONFIG_BUILDER
                 .comment("Entities that will be replaced or removed.")
-                .defineList("the replaced", entityToReplace, stringValidator);
+                .defineList("the replaced", Lists.newArrayList(), stringValidator);
         REPLACER = CONFIG_BUILDER
                 .comment("Replacer entities.")
-                .defineList("the replacers", replacer, stringValidator);
+                .defineList("the replacers", Lists.newArrayList(), stringValidator);
         NBT = CONFIG_BUILDER
                 .comment("The NBTs of the replacers. You don't need to write { } here.")
-                .defineList("replacer entity NBT", nbt, stringValidator);
+                .defineList("replacer entity NBT", Lists.newArrayList(), stringValidator);
         REPLACE_CHANCE = CONFIG_BUILDER
                 .comment("Chance of the replacement or removal.",
                         "This value will be compared with a random int between 0 and 100.",
                         "If this value is bigger than the random, replacement or removal will happen.")
-                .defineList("the replacement chance", replaceChance, intValidator);
+                .defineList("the replacement chance", Lists.newArrayList(), intValidator);
         REMOVE = CONFIG_BUILDER
                 .comment("Mark the replacement as removal.")
-                .defineList("is removal", replaceToAir, booleanValidator);
+                .defineList("is removal", Lists.newArrayList(), booleanValidator);
         REMOVAL_MATCHES_CHANCE = CONFIG_BUILDER
                 .comment("Let the removal follows replacement chance")
-                .defineList("remove by chance", chanceReplaceToAir, booleanValidator);
+                .defineList("remove by chance", Lists.newArrayList(), booleanValidator);
         CONFIG_BUILDER.pop();
         COMMON_CONFIG = CONFIG_BUILDER.build();
     }

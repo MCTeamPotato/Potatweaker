@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "potatweaker",
+  "version": "${version}",
+
+  "name": "Potatweaker",
+  "description": "",
+  "authors": [
+    "TeamPotato"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+
+  "license": "LGPL-v3",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.teampotato.potatweaker.Potatweaker"
+    ]
+  },
+  "mixins": [
+    "potatweaker.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": "*",
+    "fabric-api": "*",
+    "minecraft": "*",
+    "java": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
