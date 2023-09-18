@@ -5,7 +5,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,9 +19,9 @@ public class EventHandler {
     private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     @SubscribeEvent
-    public static void ctrlSpawn(LivingSpawnEvent.@NotNull CheckSpawn event) {
+    public static void ctrlSpawn(MobSpawnEvent.@NotNull FinalizeSpawn event) {
         Entity replaced = event.getEntity();
-        Level world = replaced.level;
+        Level world = replaced.getCommandSenderWorld();
         MinecraftServer server = world.getServer();
         if (world.isClientSide || Config.REPLACED.get().isEmpty() || server == null) return;
         ResourceLocation type = ForgeRegistries.ENTITY_TYPES.getKey(replaced.getType());
@@ -51,7 +51,7 @@ public class EventHandler {
     private static void summonHelper(@NotNull MinecraftServer server, Integer index, @NotNull Entity replaced) {
         Vec3 pos = replaced.position();
 
-        String dim = replaced.level.dimension().location().toString();
+        String dim = replaced.getCommandSenderWorld().dimension().location().toString();
         String replacer = Config.REPLACER.get().get(index);
         String nbt = Config.NBT.get().get(index);
 
