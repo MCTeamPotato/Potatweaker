@@ -1,13 +1,12 @@
 plugins {
-    id 'maven-publish'
     id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
-version = '1.19.2-1.0.2'
+version = '1.19.2-1.1.0'
 group = 'com.teampotato.potatweaker' 
 archivesBaseName = 'potatweaker'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 minecraft {
     mappings channel: 'official', version: '1.19.2'
@@ -81,7 +80,7 @@ jar {
     manifest {
         attributes([
                 "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Version"  : version,
                 "Implementation-Vendor"   : "teampotato",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
@@ -89,19 +88,6 @@ jar {
 }
 
 jar.finalizedBy('reobfJar')
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file://${project.projectDir}/mcmodsrepo"
-        }
-    }
-}
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
