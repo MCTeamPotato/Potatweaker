@@ -5,8 +5,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.living.MobSpawnEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -19,7 +18,7 @@ public class EventHandler {
     private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     @SubscribeEvent
-    public static void ctrlSpawn(MobSpawnEvent.@NotNull FinalizeSpawn event) {
+    public static void ctrlSpawn(@NotNull EntityJoinLevelEvent event) {
         Entity replaced = event.getEntity();
         Level world = replaced.getCommandSenderWorld();
         MinecraftServer server = world.getServer();
@@ -36,13 +35,13 @@ public class EventHandler {
 
         if (isRemoval) {
             if (removalMatchesChance) {
-                if (replaceChance > random.nextInt(101)) event.setResult(Event.Result.DENY);
+                if (replaceChance > random.nextInt(101)) event.setCanceled(true);
             } else {
-                event.setResult(Event.Result.DENY);
+                event.setCanceled(true);
             }
         } else {
             if (replaceChance > random.nextInt(101) && world.getServer() != null) {
-                event.setResult(Event.Result.DENY);
+                event.setCanceled(true);
                 summonHelper(server, index, replaced);
             }
         }
