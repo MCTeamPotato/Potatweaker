@@ -22,7 +22,7 @@ public class EventHandler {
         Entity replaced = event.getEntity();
         Level world = replaced.getCommandSenderWorld();
         MinecraftServer server = world.getServer();
-        if (world.isClientSide || Config.REPLACED.get().isEmpty() || server == null) return;
+        if (world.isClientSide || Config.REPLACED.get().isEmpty() || server == null || replaced.getTags().contains("potatweaker.spawned")) return;
         ResourceLocation type = ForgeRegistries.ENTITY_TYPES.getKey(replaced.getType());
         if (type == null) return;
 
@@ -45,6 +45,7 @@ public class EventHandler {
                 summonHelper(server, index, replaced);
             }
         }
+        if (!event.isCanceled()) replaced.addTag("potatweaker.spawned");
     }
 
     private static void summonHelper(@NotNull MinecraftServer server, Integer index, @NotNull Entity replaced) {
