@@ -10,7 +10,7 @@ public class Config {
     public static ForgeConfigSpec COMMON_CONFIG;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> REPLACED, REPLACER, NBT;
     public static ForgeConfigSpec.ConfigValue<List<? extends Integer>> REPLACE_CHANCE;
-    public static ForgeConfigSpec.ConfigValue<List<? extends Boolean>> REMOVE, REMOVAL_MATCHES_CHANCE;
+    public static ForgeConfigSpec.ConfigValue<List<? extends Boolean>> REMOVE, REMOVAL_MATCHES_CHANCE, USE_NBT_WHEN_REPLACING;
 
     static {
         Predicate<Object> trueValidator = a -> true;
@@ -22,9 +22,12 @@ public class Config {
         REPLACER = CONFIG_BUILDER
                 .comment("Replacer entities.")
                 .defineList("the replacers", new ObjectArrayList<>(), trueValidator);
+        USE_NBT_WHEN_REPLACING = CONFIG_BUILDER
+                .comment("Whether or not use NBT when replacing. If you enable this but the corresponding nbt is empty, the replacer will not have any nbt, including weapon in hand.")
+                .defineList("use NBT", new ObjectArrayList<>(), trueValidator);
         NBT = CONFIG_BUILDER
                 .comment("The NBTs of the replacers. You don't need to write { } here.")
-                .defineList("replacer entity NBT", new ObjectArrayList<>(), trueValidator);
+                .defineList("replacer entity NBTs", new ObjectArrayList<>(), trueValidator);
         REPLACE_CHANCE = CONFIG_BUILDER
                 .comment("Chance of the replacement or removal.",
                         "This value will be compared with a random int between 0 and 100.",

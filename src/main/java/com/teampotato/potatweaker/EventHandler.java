@@ -54,8 +54,14 @@ public class EventHandler {
         String dim = replaced.getCommandSenderWorld().dimension().location().toString();
         String replacer = Config.REPLACER.get().get(index);
         String nbt = Config.NBT.get().get(index);
+        boolean useNBT = Config.USE_NBT_WHEN_REPLACING.get().get(index);
 
-        String cmd = "/execute in " + dim + " run summon " + replacer + " " + pos.x + " " + pos.y + " " + pos.z + " {" + nbt + "}";
+        String cmd;
+        if (useNBT) {
+            cmd = "/execute in " + dim + " run summon " + replacer + " " + pos.x + " " + pos.y + " " + pos.z + " {" + nbt + "}";
+        } else {
+            cmd = "/execute in " + dim + " run summon " + replacer + " " + pos.x + " " + pos.y + " " + pos.z;
+        }
 
         server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), cmd);
     }
